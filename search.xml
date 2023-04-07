@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>java执行shell命令无法使用管道符</title>
+      <link href="/posts/474787d7.html"/>
+      <url>/posts/474787d7.html</url>
+      
+        <content type="html"><![CDATA[<p>最近遇到了一个问题，java通过Runtime exec()执行shell命令无法使用grep。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rt.exec(<span class="string">&quot;top -b -n 1 | grep top&quot;</span>)</span><br></pre></td></tr></table></figure><p>这样是无法执行的</p><p>改为:</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String[] command = &#123; <span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;top -b -n 1 | grep top&quot;</span>&#125;;</span><br></pre></td></tr></table></figure><p>这样就可以了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ubuntu安装及常用命令</title>
       <link href="/posts/3178680b.html"/>
       <url>/posts/3178680b.html</url>

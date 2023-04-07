@@ -6,7 +6,7 @@
   <link href="https://codegao.cc/atom.xml" rel="self"/>
   
   <link href="https://codegao.cc/"/>
-  <updated>2023-03-22T05:44:25.016Z</updated>
+  <updated>2023-04-07T05:31:49.433Z</updated>
   <id>https://codegao.cc/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java执行shell命令无法使用管道符</title>
+    <link href="https://codegao.cc/posts/474787d7.html"/>
+    <id>https://codegao.cc/posts/474787d7.html</id>
+    <published>2023-04-07T05:21:41.000Z</published>
+    <updated>2023-04-07T05:31:49.433Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近遇到了一个问题，java通过Runtime exec()执行shell命令无法使用grep。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rt.exec(<span class="string">&quot;top -b -n 1 | grep top&quot;</span>)</span><br></pre></td></tr></table></figure><p>这样是无法执行的</p><p>改为:</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String[] command = &#123; <span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;top -b -n 1 | grep top&quot;</span>&#125;;</span><br></pre></td></tr></table></figure><p>这样就可以了</p>]]></content>
+    
+    
+    <summary type="html">java执行shell命令无法使用grep管道符</summary>
+    
+    
+    
+    <category term="Java" scheme="https://codegao.cc/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="https://codegao.cc/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>ubuntu安装及常用命令</title>
@@ -409,27 +430,6 @@
     
     
     <summary type="html">Java8新特性</summary>
-    
-    
-    
-    <category term="Java" scheme="https://codegao.cc/categories/Java/"/>
-    
-    
-    <category term="Java" scheme="https://codegao.cc/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Java11新特性</title>
-    <link href="https://codegao.cc/posts/25e3655b.html"/>
-    <id>https://codegao.cc/posts/25e3655b.html</id>
-    <published>2022-04-10T01:06:41.000Z</published>
-    <updated>2023-03-13T07:22:48.943Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Http-Client标准化">Http Client标准化</h2><p>Java11对Java9中引入并在Java10中进行了更新的Http Client API进行了标准化，在前两个版本中进行孵化的同时，Http Client几乎被完全重写，并且现在完全支持异步非阻塞。</p><p>并且，Java11中，Http Client的包名由<code>jdk.incubator.http</code>改为<code>java.net.http</code>，该API通过<code>CompleteableFuture</code>提供非阻塞请求和响应语义。使用起来也很简单，</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">request</span> <span class="operator">=</span> HttpRequest.newBuilder()</span><br><span class="line">    .uri(URI.create(<span class="string">&quot;https://javastack.cn&quot;</span>))</span><br><span class="line">    .GET()</span><br><span class="line">    .build();</span><br><span class="line"><span class="type">var</span> <span class="variable">client</span> <span class="operator">=</span> HttpClient.newHttpClient();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同步</span></span><br><span class="line">HttpResponse&lt;String&gt; response = client.send(request, HttpResponse.BodyHandlers.ofString());</span><br><span class="line">System.out.println(response.body());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步</span></span><br><span class="line">client.sendAsync(request, HttpResponse.BodyHandlers.ofString())</span><br><span class="line">    .thenApply(HttpResponse::body)</span><br><span class="line">    .thenAccept(System.out::println);</span><br></pre></td></tr></table></figure><h2 id="增强">增强</h2><p>Java11增加了一系列的字符串处理方法：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断字符串是否为空</span></span><br><span class="line"><span class="string">&quot; &quot;</span>.isBlank();<span class="comment">//true</span></span><br><span class="line"><span class="comment">//去除字符串首尾空格</span></span><br><span class="line"><span class="string">&quot; Java &quot;</span>.strip();<span class="comment">// &quot;Java&quot;</span></span><br><span class="line"><span class="comment">//去除字符串首部空格</span></span><br><span class="line"><span class="string">&quot; Java &quot;</span>.stripLeading();   <span class="comment">// &quot;Java &quot;</span></span><br><span class="line"><span class="comment">//去除字符串尾部空格</span></span><br><span class="line"><span class="string">&quot; Java &quot;</span>.stripTrailing();  <span class="comment">// &quot; Java&quot;</span></span><br><span class="line"><span class="comment">//重复字符串多少次</span></span><br><span class="line"><span class="string">&quot;Java&quot;</span>.repeat(<span class="number">3</span>);             <span class="comment">// &quot;JavaJavaJava&quot;</span></span><br><span class="line"><span class="comment">//返回由行终止符分隔的字符串集合。</span></span><br><span class="line"><span class="string">&quot;A\nB\nC&quot;</span>.lines().count();    <span class="comment">// 3</span></span><br><span class="line"><span class="string">&quot;A\nB\nC&quot;</span>.lines().collect(Collectors.toList());</span><br></pre></td></tr></table></figure><h2 id="Optional增强">Optional增强</h2><p>新增了<code>empty()</code>方法来判断指定的<code>Optional</code>对象是否为空</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">var</span> <span class="variable">op</span> <span class="operator">=</span> Optional.empty();</span><br><span class="line">System.out.println(op.isEmpty());<span class="comment">//判断指定的 Optional 对象是否为空</span></span><br></pre></td></tr></table></figure><h2 id="ZGC（可伸缩低延迟垃圾收集器）">ZGC（可伸缩低延迟垃圾收集器）</h2><p><strong>ZGC即Z Garbage Collector，是一个可伸缩的、低延迟的垃圾收集器。</strong></p><p>ZGC主要为了满足如下目标进行设计：</p><ul><li>GC停顿时间不超过10ms</li><li>技能处理几百MB的小堆，也能处理几个TB的大堆</li><li>应用吞吐能力不会下降超过15%</li><li>方便在此基础上引入新的GC特性和利用colored针以及Load barries优化奠定基础</li><li>只支持Linux/64位平台</li></ul><p>与CMS中的ParNew和G1类似，ZGC也采用标记-复制算法，不过GZC对该算法做了重大改进。<br>在ZGC中出现Stop TheWorld的情况会更少。</p><h2 id="Lamdba参数的局部变量语法">Lamdba参数的局部变量语法</h2><p>从Java10开始，便引入了局部变量类型推断这一关键特性。类型推断允许使用关键字var作为局部变量的类型而不是实际类型，编译器根据分配给变量的值推断出类型。</p><p>Java10中对var关键字存在几个限制</p><ul><li>只能用于局部变量上</li><li>声明时必须初始化</li><li>不能用作方法参数</li><li>不能在Lamdba表达式中使用</li></ul><p>Java11 开始允许开发者在Lamdba表达式中使用var进行参数声明。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面两者是等价的</span></span><br><span class="line">Consumer&lt;String&gt; consumer = (<span class="keyword">var</span> i) -&gt; System.out.println(i);</span><br><span class="line">Consumer&lt;String&gt; consumer = (String i) -&gt; System.out.println(i);</span><br></pre></td></tr></table></figure><h2 id="启动单文件源代码程序">启动单文件源代码程序</h2><p>这意味着我们可以运行单一文件的Java源代码。此功能允许使用Java解释器直接执行Java源代码。源代码在内存中编译，然后由解释器执行，不需要在磁盘上生成<code>.class</code>文件了。唯一的约束在于所有相关的类必须定义在同一个Java文件中。</p><p>对于Java初学者并希望尝试简单程序的人特别有用，并且能和jshell一起使用。一定程度上增强了使用Java来写脚本程序的能力。</p><h2 id="其他">其他</h2><ul><li><strong>新的垃圾回收器Epsilon</strong>：一个完全小及的GC实现，分配有限的内存资源，最大限度的降低内存占用和内存吞吐延迟时间。</li><li><strong>低开销的Heap Profiling</strong>：Java11中提供一种低开销的Java堆分配采样方法，能够得到对分配的Java对象信息，并且能够通过JVM访问堆信息</li><li><strong>TLS1.3协议</strong>：Java11中包含了栓除安全性(TLS)1.3规范的实现，替换了之前版本中包含的TLS，包括TLS1.2，同时还改进了其他TLS功能，例如OCSP装订扩展，以及会话散列和扩展主密钥扩展，在安全性和新跟那个方面也做了很多提升</li><li><strong>飞行记录器</strong>：飞行记录器之前是商业版JDK的一项分析工具，但在Java11中，其代码被包含到公开代码库中，这样所有人都能使用该功能了。</li></ul>]]></content>
-    
-    
-    <summary type="html">Java11新特性</summary>
     
     
     
